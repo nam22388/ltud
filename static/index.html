@@ -344,8 +344,7 @@
       </svg>
     </div>
     <div>
-      <div class="header-title">CSDL Assistant</div>
-      <div class="header-sub">Cơ sở dữ liệu · RAG · Gemma 2</div>
+      <div class="header-title">Assistant</div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:12px">
@@ -362,20 +361,20 @@
       </svg>
     </div>
     <h2>Xin chào! 👋</h2>
-    <p>Tôi là trợ lý học tập môn Cơ sở dữ liệu. Hỏi tôi bất cứ điều gì về môn học này.</p>
+    <p>Tôi là trợ lý học tập. Hỏi tôi bất cứ điều gì.</p>
     <div class="suggestions">
       <button class="suggestion" onclick="suggest(this)">SQL là gì?</button>
       <button class="suggestion" onclick="suggest(this)">Chuẩn hóa 3NF</button>
       <button class="suggestion" onclick="suggest(this)">Index hoạt động thế nào?</button>
-      <button class="suggestion" onclick="suggest(this)">Transaction và ACID</button>
-      <button class="suggestion" onclick="suggest(this)">ER diagram là gì?</button>
+      
+      
     </div>
   </div>
 </div>
 
 <div class="input-area">
   <div class="input-wrap">
-    <textarea id="input" placeholder="Hỏi về cơ sở dữ liệu..." rows="1"></textarea>
+    <textarea id="input" placeholder="Nhập câu hỏi..." rows="1"></textarea>
     <button id="send" onclick="sendMessage()">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/>
@@ -515,13 +514,11 @@ async function resetChat() {
         </svg>
       </div>
       <h2>Cuộc hội thoại mới</h2>
-      <p>Tôi sẵn sàng giúp bạn ôn tập môn Cơ sở dữ liệu.</p>
+      <p>Tôi sẵn sàng giúp bạn ôn tập.</p>
       <div class="suggestions">
         <button class="suggestion" onclick="suggest(this)">SQL là gì?</button>
         <button class="suggestion" onclick="suggest(this)">Chuẩn hóa 3NF</button>
         <button class="suggestion" onclick="suggest(this)">Index hoạt động thế nào?</button>
-        <button class="suggestion" onclick="suggest(this)">Transaction và ACID</button>
-        <button class="suggestion" onclick="suggest(this)">ER diagram là gì?</button>
       </div>
     </div>`;
 }

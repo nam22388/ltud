@@ -3,7 +3,7 @@ from flask_cors import CORS
 from openai import OpenAI
 import os
 
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
@@ -18,10 +18,10 @@ DB_PATH = "./db"
 if os.path.exists(DB_PATH) and os.listdir(DB_PATH):
     db = Chroma(persist_directory=DB_PATH, embedding_function=embedding)
 else:
-    files = ["tai_lieu/CSDL.pdf"]
+    files = ["tai_lieu/data.md"]  
     documents = []
     for file in files:
-        loader = PyPDFLoader(file)
+        loader = TextLoader(file, encoding="utf-8")
         documents.extend(loader.load())
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=100)
@@ -31,10 +31,14 @@ else:
 
 client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
 
-system_prompt = """Bạn là chatbot hỗ trợ học tập môn cơ sở dữ liệu.
-Nhiệm vụ của bạn là trả lời các câu hỏi liên quan đến môn học này.
-Nếu bạn không biết câu trả lời, hãy nói rõ ràng bạn không biết.
-Tuyệt đối không bịa ra thông tin nếu không có ngữ cảnh liên quan được cung cấp."""
+system_prompt = """Bạn là chatbot hỗ trợ học tập.
+
+Khi trả lời, hãy:
+1. Ưu tiên thông tin từ tài liệu được cung cấp nếu có liên quan
+2. Kết hợp với kiến thức của bạn để giải thích rõ hơn, đầy đủ hơn
+3. Nếu tài liệu và kiến thức của bạn mâu thuẫn, hãy ưu tiên tài liệu và nêu rõ sự khác biệt
+
+Trả lời rõ ràng, có ví dụ minh họa khi cần."""
 
 
 chat_histories = {}
@@ -61,7 +65,12 @@ def chat():
     
     results = db.similarity_search(user_input, k=3)
     context = "\n\n".join([r.page_content for r in results])
-    rag_prompt = f"Dựa trên tài liệu sau:\n{context}\n\nHãy trả lời: {user_input}"
+    rag_prompt = f"""Tài liệu tham khảo (nếu có liên quan):
+    {context}
+
+    Câu hỏi: {user_input}
+
+    Hãy trả lời dựa trên tài liệu trên kết hợp với kiến thức của bạn."""
 
     messages.append({"role": "user", "content": rag_prompt})
 
